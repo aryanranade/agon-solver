@@ -9,5 +9,6 @@ class TaskType(Enum):
     RULE_ENGINE = auto()
     POLY_GCD = auto()
     DEFINITE_INTEGRAL = auto()
+    MATRIX_TRACE = auto()
     REASONING = auto()
     UNKNOWN = auto()

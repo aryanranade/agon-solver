@@ -15,6 +15,7 @@ from app.solvers.comparison_solver import ComparisonSolver
 from app.solvers.rule_engine_solver import RuleEngineSolver
 from app.solvers.poly_gcd_solver import PolyGCDSolver
 from app.solvers.definite_integral_solver import DefiniteIntegralSolver
+from app.solvers.matrix_trace_solver import MatrixTraceSolver
 from app.solvers.llm_fallback import LLMFallbackSolver
 
 router = APIRouter()
@@ -28,6 +29,7 @@ registry.register(TaskType.COMPARISON, ComparisonSolver())
 registry.register(TaskType.RULE_ENGINE, RuleEngineSolver())
 registry.register(TaskType.DEFINITE_INTEGRAL, DefiniteIntegralSolver())
 registry.register(TaskType.POLY_GCD, PolyGCDSolver())
+registry.register(TaskType.MATRIX_TRACE, MatrixTraceSolver())
 registry.set_fallback(LLMFallbackSolver())
 
 @router.post("/v1/answer", response_model=SolveResponse)

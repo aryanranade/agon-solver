@@ -13,6 +13,11 @@ class TaskClassifier:
     def classify(query: str, assets: List[str]) -> TaskType:
         query_lower = query.lower()
 
+        # Heuristic -3: Matrix trace — "trace" + "[[" matrix literal
+        if 'trace' in query_lower and '[[' in query:
+            logger.info("Classifier: Detected TaskType.MATRIX_TRACE")
+            return TaskType.MATRIX_TRACE
+
         # Heuristic -2: Definite integral — "∫" symbol or "definite integral"
         if '∫' in query or 'definite integral' in query_lower:
             logger.info("Classifier: Detected TaskType.DEFINITE_INTEGRAL")
