@@ -70,7 +70,7 @@ class TaskClassifier:
             return TaskType.COMPARISON
 
         # Heuristic 5: Polynomial GCD degree problems
-        if 'gcd' in query_lower and 'degree' in query_lower and re.search(r'p\s*\(x\)', query_lower):
+        if 'gcd' in query_lower and 'degree' in query_lower and re.search(r'[a-zA-Z]\s*\(x\)\s*=', query_lower):
             logger.info("Classifier: Detected TaskType.POLY_GCD")
             return TaskType.POLY_GCD
 

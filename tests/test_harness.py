@@ -3,58 +3,39 @@ import httpx
 
 API_URL = "http://127.0.0.1:8000/v1/answer"
 
-def l11(p_roots, q_roots):
-    def factors(roots):
-        return ''.join(f'(x-{r})' for r in roots)
-    query = (
-        f"Let: p(x) = {factors(p_roots)} "
-        f"q(x) = {factors(q_roots)} "
-        "Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer."
-    )
-    expected = str(len(set(p_roots) & set(q_roots)))
-    return query, expected
-
-# Also test with unicode minus (as Agon sends it)
-def l11_unicode(p_roots, q_roots):
-    def factors(roots):
-        return ''.join(f'(x−{r})' for r in roots)
-    query = (
-        f"Let: p(x) = {factors(p_roots)} "
-        f"q(x) = {factors(q_roots)} "
-        "Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer."
-    )
-    expected = str(len(set(p_roots) & set(q_roots)))
-    return query, expected
-
-def make(name, p_roots, q_roots, unicode=False):
-    fn = l11_unicode if unicode else l11
-    q, e = fn(p_roots, q_roots)
-    return {"name": name, "payload": {"query": q, "assets": []}, "expected": e}
+def q(query, expected):
+    return {"name": query[:60], "payload": {"query": query, "assets": []}, "expected": expected}
 
 TEST_CASES = [
-    # Public test case (unicode minus, as Agon sends)
-    make("L11-Public: unicode minus degree 4",     [1,2,3,4,5,6], [3,4,5,6,7,8], unicode=True),
+    # ── Public test case (unicode minus, as Agon sends it) ──────────────────
+    q("Let: p(x) = (x−1)(x−2)(x−3)(x−4)(x−5)(x−6) q(x) = (x−3)(x−4)(x−5)(x−6)(x−7)(x−8) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "4"),
 
-    # Same case with ASCII minus
-    make("L11: ASCII minus degree 4",              [1,2,3,4,5,6], [3,4,5,6,7,8]),
+    # ── ASCII minus variants ────────────────────────────────────────────────
+    q("Let: p(x) = (x-1)(x-2)(x-3)(x-4)(x-5)(x-6) q(x) = (x-3)(x-4)(x-5)(x-6)(x-7)(x-8) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "4"),
 
-    # Different overlap sizes
-    make("L11: degree 3",                          [1,2,3,4,5],   [3,4,5,6,7]),
-    make("L11: degree 2",                          [1,2,3,4],     [3,4,5,6]),
-    make("L11: degree 1",                          [1,2,3],       [3,4,5]),
-    make("L11: degree 0 (no common roots)",        [1,2,3],       [4,5,6]),
-    make("L11: degree 5 (large overlap)",          [1,2,3,4,5,6], [2,3,4,5,6,7]),
-    make("L11: degree 6 (identical polys)",        [1,2,3,4,5,6], [1,2,3,4,5,6]),
+    # ── Different overlap sizes ─────────────────────────────────────────────
+    q("Let: p(x) = (x-1)(x-2)(x-3)(x-4)(x-5) q(x) = (x-3)(x-4)(x-5)(x-6)(x-7) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "3"),
+    q("Let: p(x) = (x-1)(x-2)(x-3)(x-4) q(x) = (x-3)(x-4)(x-5)(x-6) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "2"),
+    q("Let: p(x) = (x-1)(x-2)(x-3) q(x) = (x-3)(x-4)(x-5) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "1"),
+    q("Let: p(x) = (x-1)(x-2)(x-3) q(x) = (x-4)(x-5)(x-6) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "0"),
+    q("Let: p(x) = (x-1)(x-2)(x-3)(x-4)(x-5)(x-6) q(x) = (x-1)(x-2)(x-3)(x-4)(x-5)(x-6) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "6"),
 
-    # Different root ranges
-    make("L11: shifted roots degree 4",            [3,4,5,6,7,8], [5,6,7,8,9,10]),
-    make("L11: high numbers degree 3",             [10,11,12,13], [11,12,13,14,15]),
-    make("L11: single common root",                [1,2,4,5],     [3,4,6,7]),
+    # ── Repeated roots (x-3)^2 ─────────────────────────────────────────────
+    q("Let: p(x) = (x-1)(x-2)(x-3)^2 q(x) = (x-3)(x-4)(x-5) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "1"),
+    q("Let: p(x) = (x-2)^2(x-3)(x-4) q(x) = (x-2)^2(x-3)(x-5) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "3"),
 
-    # Unicode minus variants
-    make("L11: unicode degree 3",                  [1,2,3,4,5],   [3,4,5,6,7],  unicode=True),
-    make("L11: unicode degree 0",                  [1,2,3],       [4,5,6],      unicode=True),
-    make("L11: unicode degree 6",                  [1,2,3,4,5,6], [1,2,3,4,5,6], unicode=True),
+    # ── Polynomial with coefficients (2x-6) = 2(x-3) ──────────────────────
+    q("Let: p(x) = (x-1)(2x-6)(x-4) q(x) = (x-3)(x-4)(x-5) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "2"),
+
+    # ── Unicode minus, different root sets ─────────────────────────────────
+    q("Let: p(x) = (x−1)(x−2)(x−3)(x−4)(x−5) q(x) = (x−3)(x−4)(x−5)(x−6)(x−7) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "3"),
+    q("Let: p(x) = (x−1)(x−2)(x−3) q(x) = (x−4)(x−5)(x−6) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "0"),
+
+    # ── Different polynomial names (f, g) ───────────────────────────────────
+    q("Let: f(x) = (x-1)(x-2)(x-3)(x-4) g(x) = (x-3)(x-4)(x-5)(x-6) Compute the degree of the GCD polynomial gcd(f(x), g(x)) over ℚ. Output only the integer.", "2"),
+
+    # ── Shifted root ranges ─────────────────────────────────────────────────
+    q("Let: p(x) = (x-3)(x-4)(x-5)(x-6)(x-7)(x-8) q(x) = (x-5)(x-6)(x-7)(x-8)(x-9)(x-10) Compute the degree of the GCD polynomial gcd(p(x), q(x)) over ℚ. Output only the integer.", "4"),
 ]
 
 async def run_tests():
@@ -66,11 +47,10 @@ async def run_tests():
                 response = await client.post(API_URL, json=test["payload"], timeout=5.0)
                 if response.status_code == 200:
                     output = response.json().get("output", "")
+                    status = "✅" if output == test["expected"] else "❌"
                     if output == test["expected"]:
-                        print(f"✅ [{i:02d}] {test['name']} -> '{output}'")
                         passed += 1
-                    else:
-                        print(f"❌ [{i:02d}] {test['name']} -> Expected '{test['expected']}', got '{output}'")
+                    print(f"{status} [{i:02d}] Expected '{test['expected']}', got '{output}' | {test['name'][:55]}")
                 else:
                     print(f"❌ [{i:02d}] HTTP {response.status_code}")
             except Exception as e:
