@@ -8,5 +8,6 @@ class TaskType(Enum):
     COMPARISON = auto()
     RULE_ENGINE = auto()
     POLY_GCD = auto()
+    DEFINITE_INTEGRAL = auto()
     REASONING = auto()
     UNKNOWN = auto()

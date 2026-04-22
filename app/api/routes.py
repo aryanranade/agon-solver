@@ -14,6 +14,7 @@ from app.solvers.list_ops_solver import ListOpsSolver
 from app.solvers.comparison_solver import ComparisonSolver
 from app.solvers.rule_engine_solver import RuleEngineSolver
 from app.solvers.poly_gcd_solver import PolyGCDSolver
+from app.solvers.definite_integral_solver import DefiniteIntegralSolver
 from app.solvers.llm_fallback import LLMFallbackSolver
 
 router = APIRouter()
@@ -25,6 +26,7 @@ registry.register(TaskType.CLASSIFICATION, ClassificationSolver())
 registry.register(TaskType.LIST_OPS, ListOpsSolver())
 registry.register(TaskType.COMPARISON, ComparisonSolver())
 registry.register(TaskType.RULE_ENGINE, RuleEngineSolver())
+registry.register(TaskType.DEFINITE_INTEGRAL, DefiniteIntegralSolver())
 registry.register(TaskType.POLY_GCD, PolyGCDSolver())
 registry.set_fallback(LLMFallbackSolver())
 

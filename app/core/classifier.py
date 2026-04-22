@@ -13,6 +13,11 @@ class TaskClassifier:
     def classify(query: str, assets: List[str]) -> TaskType:
         query_lower = query.lower()
 
+        # Heuristic -2: Definite integral — "∫" symbol or "definite integral"
+        if '∫' in query or 'definite integral' in query_lower:
+            logger.info("Classifier: Detected TaskType.DEFINITE_INTEGRAL")
+            return TaskType.DEFINITE_INTEGRAL
+
         # Heuristic -1: Rule engine — "Apply rules in order to input number X:"
         if re.match(r'apply rules in order to input number', query_lower):
             logger.info("Classifier: Detected TaskType.RULE_ENGINE")
