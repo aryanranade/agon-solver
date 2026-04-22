@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl --version)",
+      "Bash(npx localtunnel *)",
+      "Bash(jobs -l)",
+      "Bash(curl -s -X POST https://brave-knives-say.loca.lt/v1/answer -H 'Content-Type: application/json' -H 'bypass-tunnel-reminder: true' -d '{\"query\":\"Apply rules in order to input number 6: Rule 1: If even → double it. If odd → add 10. Rule 2: If result > 20 → subtract 5. Otherwise → add 3. Rule 3: If final result divisible by 3 → output \\\\\"FIZZ\\\\\". Otherwise → output the number.\",\"assets\":[]}')",
+      "Bash(curl -s http://127.0.0.1:8000/)",
+      "Bash(pkill -f localtunnel)",
+      "Bash(npx --yes localtunnel --port 8000)",
+      "Bash(curl -s -X POST https://tough-regions-wave.loca.lt/v1/answer -H 'Content-Type: application/json' -H 'bypass-tunnel-reminder: true' -d '{\"query\":\"Apply rules in order to input number 6: Rule 1: If even → double it. If odd → add 10. Rule 2: If result > 20 → subtract 5. Otherwise → add 3. Rule 3: If final result divisible by 3 → output \\\\\"FIZZ\\\\\". Otherwise → output the number.\",\"assets\":[]}')",
+      "Bash(disown)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -si https://all-birds-judge.loca.lt/v1/answer -X POST -H 'Content-Type: application/json' -H 'bypass-tunnel-reminder: true' -d '{\"query\":\"test\",\"assets\":[]}')",
+      "Bash(pkill -f \"lt --port\")",
+      "Bash(brew install *)",
+      "Bash(cloudflared --version)",
+      "Bash(curl -s http://localhost:4040/api/tunnels)",
+      "Bash(curl -s http://127.0.0.1:4040/api/tunnels)",
+      "Bash(curl -L \"https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-arm64.tgz\" -o /tmp/cloudflared.tgz)",
+      "Bash(tar -xzf /tmp/cloudflared.tgz -C /tmp/)",
+      "Bash(chmod +x /tmp/cloudflared)",
+      "Bash(/tmp/cloudflared --version)",
+      "Bash(ssh -o StrictHostKeyChecking=no -R 80:localhost:8000 serveo.net)",
+      "Bash(nohup ssh *)",
+      "Bash(npx --yes expose 8000)",
+      "Bash(npx --yes tunnelmole 8000)",
+      "Bash(pkill -f tunnelmole)",
+      "Bash(tee /tmp/lt_live.txt)",
+      "Bash(curl -s -m 10 -X POST https://lazy-birds-see.loca.lt/v1/answer -H 'Content-Type: application/json' -H 'bypass-tunnel-reminder: true' -d '{\"query\":\"Apply rules in order to input number 6: Rule 1: If even → double it. If odd → add 10. Rule 2: If result > 20 → subtract 5. Otherwise → add 3. Rule 3: If final result divisible by 3 → output \\\\\"FIZZ\\\\\". Otherwise → output the number.\",\"assets\":[]}')"
+    ],
+    "additionalDirectories": [
+      "/tmp"
+    ]
+  }
+}
